@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+mapper接口代理实现编写规则:
+	1. 映射文件中namespace要等于接口的全路径名称
+	2. 映射文件中sql语句id要等于接口的方法名称
+	3. 映射文件中传入参数类型要等于接口方法的传入参数类型
+	4. 映射文件中返回结果集类型要等于接口方法的返回值类型
+ -->
+<mapper namespace="com.chris.ser.dao.CurriculumDao">
+	<select id="findbyid" parameterType="int" resultType="com.chris.ser.po.Curriculum">
+			select * from curriculum where cid=#{cid}
+	</select>
+	<insert id="insertcur" parameterType="com.chris.ser.dao.Curriculum">
+		insert into curriculum value(#{cid},#{cname},#{ctid})
+	</insert>
+	
+	<select id="findcurbytid" parameterType="String" resultType="com.chris.ser.po.Curriculum">
+			select * from curriculum where ctid=#{ctid}
+	</select>
+	
+	<select id="findall"  resultType="com.chris.ser.po.Curriculum">
+			select * from curriculum 
+	</select>
+	
+	
+	<!-- 删除教师将教师任课表为null -->
+	<update id="updatecurr" parameterType="String" >
+		update curriculum set ctid=null where ctid=#{ctid}
+	</update>
+	
+	
+	
+	<!--将ctid改为null再删除  -->
+	<update id="updatenull" parameterType="int" >
+		update curriculum set ctid=null where cid=#{cid}
+	</update>
+	<delete id="deletecur" parameterType="int">
+		delete from curriculum where cid=#{cid}
+	</delete>
+	
+	
+	<!-- 修改课程 -->
+	<update id="querenxiugai" parameterType="com.chris.ser.po.Curriculum">
+		update curriculum set cname=#{cname},ctid=#{ctid} where cid=#{cid}
+	</update>
+	
+	<!-- 分页查询 -->
+	<select id="pagefindcur"  parameterType="map" resultType="com.chris.ser.po.Curriculum">
+		select * from curriculum limit #{start},#{end}
+	</select>
+	
+	<!--总条数  -->
+	<select id="curtotalCount"   resultType="int">
+		select count(*) from curriculum 
+	</select>
+</mapper>

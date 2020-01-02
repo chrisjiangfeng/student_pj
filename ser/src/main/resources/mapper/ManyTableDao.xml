@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+mapper接口代理实现编写规则:
+	1. 映射文件中namespace要等于接口的全路径名称
+	2. 映射文件中sql语句id要等于接口的方法名称
+	3. 映射文件中传入参数类型要等于接口方法的传入参数类型
+	4. 映射文件中返回结果集类型要等于接口方法的返回值类型
+ -->
+<mapper namespace="com.chris.ser.dao.ManyTableDao">
+	<select id="findall"  parameterType="String" resultType="com.chris.ser.pojo.ManyTable">
+		SELECT student.*,curriculum.*,evaluate.*,teacher.* FROM student,curriculum,evaluate, teacher WHERE student.sid=evaluate.esid  AND evaluate.ecid=curriculum.cid  AND curriculum.ctid=teacher.tid AND student.sid=#{sid}
+		
+	</select>
+	<select id="findcurbytid" parameterType="String" resultType="com.chris.ser.po.Curriculum">
+		 		SELECT * FROM curriculum WHERE ctid=#{tid}
+		</select>
+		<select id="findbycid" parameterType="int" resultType="com.chris.ser.po.Evaluate">
+			SELECT * FROM evaluate WHERE ecid =#{cid} 
+	</select>
+	
+	<!-- 分页的方式 -->
+	<select id="fenye" parameterType="map" resultType="com.chris.ser.po.Evaluate">
+			SELECT * FROM evaluate WHERE ecid =#{cid} limit #{start},#{end}
+	</select>
+	<select id="fenyecount" parameterType="map" resultType="int">
+			SELECT count(*) FROM evaluate WHERE ecid =#{cid} 
+	</select>
+	
+	<select id="findalltea_curri" resultType="com.chris.ser.pojo.Tea_Curri">
+		SELECT teacher.tid,teacher.tname,curriculum.cid,curriculum.cname FROM teacher,curriculum WHERE teacher.tid=curriculum.ctid
+	</select>
+	
+	<select id="finddetails" parameterType="int" resultType="com.chris.ser.pojo.Details">
+			SELECT teacher.tid,teacher.tname,evaluate.ecid,curriculum.cname,student.sid,student.sname,evaluate.edate,evaluate.escore,evaluate.ecomment FROM teacher,evaluate,curriculum,student WHERE curriculum.ctid=teacher.tid AND evaluate.ecid=curriculum.cid AND evaluate.esid=student.sid and ecid=#{eid}	
+		</select>
+		
+		
+	<!-- 查找学生所有课程 -->	
+	<select id="findstu_curbystuid" parameterType="String" resultType="com.chris.ser.pojo.ManyTable" >
+		SELECT curriculum.cid,curriculum.cname,curriculum.ctid,teacher.tname FROM curriculum,teacher,studentandcurriculum WHERE curriculum.ctid=teacher.tid AND studentandcurriculum.scid=curriculum.cid AND ssid=#{ssid}
+	</select>
+</mapper>

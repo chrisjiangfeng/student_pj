@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+mapper接口代理实现编写规则:
+	1. 映射文件中namespace要等于接口的全路径名称
+	2. 映射文件中sql语句id要等于接口的方法名称
+	3. 映射文件中传入参数类型要等于接口方法的传入参数类型
+	4. 映射文件中返回结果集类型要等于接口方法的返回值类型
+ -->
+<mapper namespace="com.chris.ser.dao.EvaluateDao">
+	<update id="updatebyid" parameterType="com.chris.ser.po.Evaluate">
+	         update evaluate set escore=#{escore},ecomment=#{ecomment},edate=#{edate} where eid=#{eid}
+	</update>
+	
+	<insert id="addstuselect" parameterType="com.chris.ser.po.Evaluate">
+		insert into evaluate value(#{eid},#{esid},#{ecid},#{escore},#{ecomment},#{edate})
+	</insert>
+	<!-- 删除学生评教信息 -->
+	<delete id="delpj" parameterType="String">
+		delete from evaluate where esid=#{esid}
+		</delete>
+		
+		
+	<!--删除课程评教信息  -->	
+	<delete id="deleavbyecid">
+		delete from evaluate where ecid=#{cid}
+	</delete>
+	
+	
+	
+	<select id="selectcunzai" parameterType="int" resultType="com.chris.ser.po.Evaluate">
+		select * from evaluate where ecid=#{ecid}
+	</select>
+</mapper>

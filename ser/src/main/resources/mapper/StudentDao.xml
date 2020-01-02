@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+mapper接口代理实现编写规则:
+	1. 映射文件中namespace要等于接口的全路径名称
+	2. 映射文件中sql语句id要等于接口的方法名称
+	3. 映射文件中传入参数类型要等于接口方法的传入参数类型
+	4. 映射文件中返回结果集类型要等于接口方法的返回值类型
+ -->
+<mapper namespace="com.chris.ser.dao.StudentDao">
+	<select id="findstu"  parameterType="String" resultType="com.chris.ser.po.Student">
+		select * from student where sid=#{id}
+	</select>
+	<select id="findstubyname"  parameterType="String" resultType="com.chris.ser.po.Student">
+		select * from student where sname like '%${value}%'
+	</select>
+	
+	<select id="findstubymajor"  parameterType="String" resultType="com.chris.ser.po.Student">
+		select * from student where smajor=#{smajor}
+	</select>
+	<update id="uppwd" parameterType="com.chris.ser.po.Student">
+		update student set spassword=#{spassword} where sid=#{sid}
+	</update>
+	
+	<select id="findallstu"   resultType="com.chris.ser.po.Student">
+		select * from student 
+	</select>
+	
+	<insert id="insertstu" parameterType="com.chris.ser.po.Student">
+			insert into student value(#{sid},#{spassword},#{sname},#{smajor},#{ssex},#{sage})
+	</insert>
+	
+	<!--修改学生信息 -->
+	<update id="updatestu" parameterType="com.chris.ser.po.Student">
+		update student set sname=#{sname},spassword=#{spassword},smajor=#{smajor},ssex=#{ssex},sage=#{sage} where sid=#{sid}
+	</update>
+	
+	<insert id="stuaddcur" parameterType="com.chris.ser.po.Studentandcurriculum">
+		insert into studentandcurriculum value(#{ssid},#{scid})
+	</insert>
+	<select id="findmyselect" parameterType="com.chris.ser.po.Studentandcurriculum" resultType="com.chris.ser.po.Studentandcurriculum">
+		select * from studentandcurriculum where ssid=#{ssid} and scid=#{scid}
+	</select>
+	
+	
+	<!-- 分页查询 -->
+	<select id="pagefindstu"  parameterType="map" resultType="com.chris.ser.po.Student">
+		select * from student limit #{start},#{end}
+	</select>
+	
+	<!--总条数  -->
+	<select id="stutotalCount"   resultType="int">
+		select count(*) from student 
+	</select>
+	
+	
+	<!-- 根据ID删除学生 -->
+	<delete id="delstu"  parameterType="String" >
+		delete from student where sid=#{sid}
+	</delete>
+</mapper>
